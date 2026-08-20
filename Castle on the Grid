@@ -1,0 +1,43 @@
+from collections import deque
+
+def minimumMoves(grid, startX, startY, goalX, goalY):
+    n = len(grid)
+
+    visited = [[False] * n for _ in range(n)]
+    queue = deque()
+
+    queue.append((startX, startY, 0))
+    visited[startX][startY] = True
+
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+    while queue:
+        x, y, moves = queue.popleft()
+
+        if x == goalX and y == goalY:
+            return moves
+
+        for dx, dy in directions:
+            nx = x + dx
+            ny = y + dy
+
+            while 0 <= nx < n and 0 <= ny < n and grid[nx][ny] != 'X':
+
+                if not visited[nx][ny]:
+                    visited[nx][ny] = True
+                    queue.append((nx, ny, moves + 1))
+
+                nx += dx
+                ny += dy
+
+    return -1
+
+n = int(input())
+
+grid = []
+for _ in range(n):
+    grid.append(input().strip())
+
+startX, startY, goalX, goalY = map(int, input().split())
+
+print(minimumMoves(grid, startX, startY, goalX, goalY))
